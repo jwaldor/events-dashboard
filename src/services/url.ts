@@ -35,11 +35,11 @@ export async function getUrlsByUserId(userId: string) {
   }
 }
 
-export async function deleteUrl(urlId: number, userId: string) {
+export async function deleteUrl(fullURL: string, userId: string) {
   try {
     const url = await prisma.url.deleteMany({
       where: {
-        id: urlId,
+        fullURL: fullURL,
         userId: parseInt(userId),
       },
     });
@@ -47,6 +47,23 @@ export async function deleteUrl(urlId: number, userId: string) {
     return url;
   } catch (error) {
     console.error("Error deleting URL:", error);
+    throw error;
+  }
+}
+
+export async function createUrls(fullURLs: string[], userId: string) {
+  try {
+    // Create multiple URL entries
+    const urls = await prisma.url.createMany({
+      data: fullURLs.map((fullURL) => ({
+        fullURL,
+        userId: parseInt(userId),
+      })),
+    });
+
+    return urls;
+  } catch (error) {
+    console.error("Error creating URLs:", error);
     throw error;
   }
 }
