@@ -1,8 +1,5 @@
 import { NextResponse } from "next/server";
-import { createUrls, getUrlsByUserId, deleteUrl } from "@/services/url";
-
-// Temporary user ID for testing
-const TEST_USER_ID = "123";
+import { createUrls, getUrls, deleteUrl } from "@/services/url";
 
 export async function POST(request: Request) {
   try {
@@ -15,7 +12,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const result = await createUrls(urls, TEST_USER_ID);
+    const result = await createUrls(urls);
     return NextResponse.json(result);
   } catch (error) {
     console.error("Error in POST /api/urls:", error);
@@ -28,7 +25,7 @@ export async function POST(request: Request) {
 
 export async function GET() {
   try {
-    const urls = await getUrlsByUserId(TEST_USER_ID);
+    const urls = await getUrls();
     return NextResponse.json(urls);
   } catch (error) {
     console.error("Error in GET /api/urls:", error);
@@ -47,7 +44,7 @@ export async function DELETE(request: Request) {
       return NextResponse.json({ error: "URL is required" }, { status: 400 });
     }
 
-    const result = await deleteUrl(fullURL, TEST_USER_ID);
+    const result = await deleteUrl(fullURL);
     return NextResponse.json(result);
   } catch (error) {
     console.error("Error in DELETE /api/urls:", error);
