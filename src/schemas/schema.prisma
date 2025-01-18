@@ -1,0 +1,33 @@
+// This is your Prisma schema file
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+model Url {
+    id        Int      @id @default(autoincrement())
+    fullURL   String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    events    Event[]
+}
+
+model Event {
+    id             Int       @id @default(autoincrement())
+    parentUrl      Url       @relation(fields: [parentUrlId], references: [id])
+    parentUrlId    Int
+    createdAt      DateTime  @default(now())
+    updatedAt      DateTime  @updatedAt
+    extractedTitle String?
+    location       String?
+    dateTime       DateTime?
+    repeating      Boolean
+    additionalInfo String?
+    imageUrl       String?
+    eventUrl       String?
+}
