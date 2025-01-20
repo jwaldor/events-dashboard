@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { createUrls, getUrls, deleteUrl } from "@/services/url";
+import { initiallyScrapeUrl } from "@/services/scrape";
+import { createEvents } from "@/services/events";
 
 export async function POST(request: Request) {
   try {
@@ -13,6 +15,43 @@ export async function POST(request: Request) {
     }
 
     const result = await createUrls(urls);
+    console.log(result);
+    (async () => {
+      const events = await Promise.all(
+        result.map(async (url) => ({
+          parentUrlId: url.id,
+          events: await initiallyScrapeUrl(url.fullURL),
+        }))
+      );
+      const flattenedEvents = events
+        .map((event) =>
+          event.events.map((e) => ({
+            parentUrlId: event.parentUrlId,
+            rawText: e.rawText,
+            eventUrl: e.eventUrl,
+            extractedTitle: e.extractedTitle,
+            location: e.location,
+            dateTime: e.dateTime ? new Date(e.dateTime) : null,
+            repeating: e.repeating,
+            additionalInfo: e.additionalInfo,
+            imageUrl: e.imageUrl,
+          }))
+        )
+        .flat();
+      // await createEvents(
+      //   {
+      //     parentUrlId: 1,
+      //     extractedTitle: "test",
+      //     eventUrl: "test",
+      //     location: "test",
+      //     dateTime: new Date(),
+      //     repeating: false,
+      //     additionalInfo: "test",
+      //     imageUrl: "test",
+      //   },
+      // ]);
+      await createEvents(flattenedEvents);
+    })();
     return NextResponse.json(result);
   } catch (error) {
     console.error("Error in POST /api/urls:", error);

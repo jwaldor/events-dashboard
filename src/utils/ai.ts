@@ -30,6 +30,10 @@ export function extractAndValidateJson<T extends z.ZodType>(
   }
 }
 
+if (!process.env.DEEPSEEK_API_KEY) {
+  throw new Error("DEEPSEEK_API_KEY is not set");
+}
+
 const deepseek = new OpenAI({
   baseURL: "https://api.deepseek.com",
   apiKey: process.env.DEEPSEEK_API_KEY,
@@ -41,7 +45,7 @@ export async function callDeepseekTextResponse(
   try {
     const completion = await deepseek.chat.completions.create({
       model: "deepseek-chat",
-      max_tokens: 1024,
+      max_tokens: 4096,
       messages: [
         {
           role: "user",

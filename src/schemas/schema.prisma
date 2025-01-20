@@ -19,6 +19,7 @@ model Url {
 
 model Event {
     id             Int       @id @default(autoincrement())
+    rawText        String
     parentUrl      Url       @relation(fields: [parentUrlId], references: [id])
     parentUrlId    Int
     createdAt      DateTime  @default(now())
@@ -26,7 +27,7 @@ model Event {
     extractedTitle String?
     location       String?
     dateTime       DateTime?
-    repeating      Boolean
+    repeating      Boolean?
     additionalInfo String?
     imageUrl       String?
     eventUrl       String?
