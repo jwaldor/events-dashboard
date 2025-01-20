@@ -13,7 +13,10 @@ const initBrowser = async () => {
   return browser;
 };
 
-export const getUrlImage = async (url: string): Promise<string> => {
+export const getUrlImage = async (
+  url: string,
+  maxHeight: number = 2400
+): Promise<string> => {
   try {
     const browser = await initBrowser();
     const page = await browser.newPage();
@@ -24,15 +27,25 @@ export const getUrlImage = async (url: string): Promise<string> => {
     // Navigate to URL and wait for network to be idle
     await page.goto(url, { waitUntil: "networkidle0" });
 
+    // Get page dimensions
+    const pageHeight = await page.evaluate((maxHeight) => {
+      return Math.min(document.documentElement.scrollHeight, maxHeight);
+    }, maxHeight);
+
     // Take screenshot and return as base64
     const screenshot = await page.screenshot({
       type: "png",
-      fullPage: true,
       encoding: "base64",
+      clip: {
+        x: 0,
+        y: 0,
+        width: 1280,
+        height: pageHeight,
+      },
     });
 
     await page.close();
-    return `data:image/png;base64,${screenshot}`;
+    return screenshot;
   } catch (error) {
     console.error("Error taking screenshot:", error);
     throw error;

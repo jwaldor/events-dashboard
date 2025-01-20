@@ -63,3 +63,50 @@ export async function callDeepseekTextResponse(
     throw error;
   }
 }
+
+if (!process.env.OPENROUTER_API_KEY) {
+  throw new Error("OPENROUTER_API_KEY is not set");
+}
+const openRouter = new OpenAI({
+  baseURL: "https://openrouter.ai/api/v1",
+  apiKey: process.env.OPENROUTER_API_KEY,
+});
+
+export const callQwen = async (
+  prompt: string,
+  base64Image: string
+): Promise<string> => {
+  try {
+    console.log("theimage", base64Image.slice(0, 100));
+    const completion = await openRouter.chat.completions.create({
+      model: "qwen/qwen-2-vl-72b-instruct",
+      max_tokens: 4096,
+      temperature: 0,
+      messages: [
+        {
+          role: "user",
+          content: [
+            {
+              type: "text",
+              text: prompt,
+            },
+            {
+              type: "image_url",
+              image_url: {
+                url: `data:image/png;base64,${base64Image}`,
+              },
+            },
+          ],
+        },
+      ],
+    });
+    console.log("qwen response", JSON.stringify(completion));
+    if (completion.choices[0].message) {
+      return completion.choices[0].message.content;
+    }
+    throw new Error("No content in the response");
+  } catch (error) {
+    console.error("Error calling Qwen:", error);
+    throw error;
+  }
+};

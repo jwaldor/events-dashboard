@@ -30,7 +30,7 @@ export const eventSchema = z
       dateTime: z
         .union([z.string().datetime(), z.null()])
         .describe(
-          "The date and time of the event, if provided. If time is not provided, you can make it midnight."
+          "The date and time of the event, if provided. If time is not provided, you can make it midnight. If time zone is not provided, you can make it UTC."
         ),
       additionalInfo: z
         .union([z.string(), z.null()])
