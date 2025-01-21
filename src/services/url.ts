@@ -1,12 +1,11 @@
 import { prisma } from "../prismaClient";
 
-export async function createUrl(fullURL: string, userId: string) {
+export async function createUrl(fullURL: string) {
   try {
     // Create new URL entry
     const url = await prisma.url.create({
       data: {
         fullURL,
-        userId: parseInt(userId),
       },
     });
 
@@ -17,12 +16,10 @@ export async function createUrl(fullURL: string, userId: string) {
   }
 }
 
-export async function getUrlsByUserId(userId: string) {
+export async function getUrls() {
   try {
+    console.log("Fetching URLs");
     const urls = await prisma.url.findMany({
-      where: {
-        userId: parseInt(userId),
-      },
       orderBy: {
         createdAt: "desc",
       },
@@ -35,12 +32,11 @@ export async function getUrlsByUserId(userId: string) {
   }
 }
 
-export async function deleteUrl(fullURL: string, userId: string) {
+export async function deleteUrl(fullURL: string) {
   try {
     const url = await prisma.url.deleteMany({
       where: {
         fullURL: fullURL,
-        userId: parseInt(userId),
       },
     });
 
@@ -51,13 +47,12 @@ export async function deleteUrl(fullURL: string, userId: string) {
   }
 }
 
-export async function createUrls(fullURLs: string[], userId: string) {
+export async function createUrls(fullURLs: string[]) {
   try {
     // Create multiple URL entries
     const urls = await prisma.url.createMany({
       data: fullURLs.map((fullURL) => ({
         fullURL,
-        userId: parseInt(userId),
       })),
     });
 
