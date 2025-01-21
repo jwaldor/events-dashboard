@@ -4,7 +4,6 @@ import type { Event } from "@/types/event"
 
 export default function EventCard({ event }: { event: Event }) {
   const linkUrl = event.eventUrl || event.parentUrl?.fullURL || "#"
-
   return (
     <Link href={linkUrl} className="block">
       <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
