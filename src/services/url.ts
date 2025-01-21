@@ -49,12 +49,13 @@ export async function deleteUrl(fullURL: string) {
 
 export async function createUrls(fullURLs: string[]) {
   try {
-    // Create multiple URL entries
-    const urls = await prisma.url.createMany({
-      data: fullURLs.map((fullURL) => ({
-        fullURL,
-      })),
-    });
+    const urls = await prisma.$transaction(
+      fullURLs.map((fullURL) =>
+        prisma.url.create({
+          data: { fullURL },
+        })
+      )
+    );
 
     return urls;
   } catch (error) {
