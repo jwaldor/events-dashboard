@@ -34,6 +34,7 @@ export async function getUrls() {
 
 export async function deleteUrl(fullURL: string) {
   try {
+    console.log("Deleting URL:", fullURL);
     const url = await prisma.url.deleteMany({
       where: {
         fullURL: fullURL,
