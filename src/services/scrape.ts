@@ -20,7 +20,7 @@ ${markdown}`;
   return events;
 }
 
-export async function initiallyScrapeUrlGeminiImage(url: string) {
+export async function initiallyScrapeUrlImage(url: string) {
   const image = await getUrlImage(url);
   console.log("got image");
   const prompt = `Extract all the events from the image according to the following JSON schema. Enclose the JSON within triple backticks (\`\`\`): 

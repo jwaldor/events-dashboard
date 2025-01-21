@@ -9,3 +9,17 @@ export async function createEvents(
   });
   return result;
 }
+
+export async function getAllEvents() {
+  try {
+    const events = await prisma.event.findMany({
+      include: {
+        parentUrl: true, // This will include the associated Url data
+      },
+    });
+    return events;
+  } catch (error) {
+    console.error("Error fetching events:", error);
+    throw error;
+  }
+}
