@@ -72,14 +72,15 @@ const openRouter = new OpenAI({
   apiKey: process.env.OPENROUTER_API_KEY,
 });
 
-export const callQwen = async (
+export const callOpenRouterModel = async (
   prompt: string,
-  base64Image: string
+  base64Image: string,
+  model: string
 ): Promise<string> => {
   try {
     console.log("theimage", base64Image.slice(0, 100));
     const completion = await openRouter.chat.completions.create({
-      model: "qwen/qwen-2-vl-72b-instruct",
+      model: model,
       max_tokens: 4096,
       temperature: 0,
       messages: [

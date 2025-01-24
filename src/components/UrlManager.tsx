@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { toast } from "@/hooks/use-toast"
+import { Textarea } from "@/components/ui/textarea"
 
 interface Url {
   id: string
@@ -93,12 +93,11 @@ export default function UrlManager() {
       <div className="space-y-4">
         <h2 className="text-xl font-semibold">Add URLs</h2>
         <div className="flex space-x-2">
-          <Input
+          <Textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Enter URLs (one per line)"
             className="flex-grow"
-            multiline
             rows={3}
           />
           <Button onClick={handleAddUrls}>Add</Button>

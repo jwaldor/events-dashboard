@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createUrls, getUrls, deleteUrl } from "@/services/url";
-import { initiallyScrapeUrlGeminiImage } from "@/services/scrape";
+import { initiallyScrapeUrlImage } from "@/services/scrape";
 import { createEvents } from "@/services/events";
 
 export async function POST(request: Request) {
@@ -20,7 +20,10 @@ export async function POST(request: Request) {
       const events = await Promise.all(
         result.map(async (url) => ({
           parentUrlId: url.id,
-          events: await initiallyScrapeUrlGeminiImage(url.fullURL),
+          events: await initiallyScrapeUrlImage(
+            url.fullURL,
+            "qwen/qwen-2-vl-72b-instruct"
+          ),
         }))
       );
       const flattenedEvents = events

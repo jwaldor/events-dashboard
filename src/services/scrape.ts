@@ -2,7 +2,7 @@ import { eventSchema } from "@/schemas/zodDTOs";
 import { extractAndValidateJson } from "@/utils/ai";
 import { getMarkdownFromUrl } from "@/utils/jina";
 import { zodToJsonSchema } from "zod-to-json-schema";
-import { callDeepseekTextResponse, callQwen } from "@/utils/ai";
+import { callDeepseekTextResponse, callOpenRouterModel } from "@/utils/ai";
 import { getUrlImage } from "@/utils/puppeteer";
 
 export async function initiallyScrapeUrl(url: string) {
@@ -20,7 +20,7 @@ ${markdown}`;
   return events;
 }
 
-export async function initiallyScrapeUrlGeminiImage(url: string) {
+export async function initiallyScrapeUrlImage(url: string, model: string) {
   const image = await getUrlImage(url);
   console.log("got image");
   const prompt = `Extract all the events from the image according to the following JSON schema. Enclose the JSON within triple backticks (\`\`\`): 
@@ -29,7 +29,7 @@ export async function initiallyScrapeUrlGeminiImage(url: string) {
     ${JSON.stringify(zodToJsonSchema(eventSchema), null, 2)}
   `;
   console.log("eventprompt", prompt);
-  const response = await callQwen(prompt, image);
+  const response = await callOpenRouterModel(prompt, image, model);
   console.log("scrape with gemini image");
   console.log(response);
   const events = extractAndValidateJson(response, eventSchema);
