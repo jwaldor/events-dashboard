@@ -16,7 +16,9 @@ export default function EventList({ events }: { events: Event[] }) {
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
       {sortedEvents.map((event) => (
-        <EventCard key={event.id} event={event} />
+        <div className="py-1" key={event.id}>
+          <EventCard event={event} />
+        </div>
       ))}
     </div>
   )
