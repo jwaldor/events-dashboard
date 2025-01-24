@@ -20,7 +20,10 @@ export async function POST(request: Request) {
       const events = await Promise.all(
         result.map(async (url) => ({
           parentUrlId: url.id,
-          events: await initiallyScrapeUrlImage(url.fullURL),
+          events: await initiallyScrapeUrlImage(
+            url.fullURL,
+            "qwen/qwen-2-vl-72b-instruct"
+          ),
         }))
       );
       const flattenedEvents = events
