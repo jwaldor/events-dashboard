@@ -2,10 +2,12 @@ import { Event } from "@prisma/client";
 import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
 
-type GeneratedEvent = Omit<
-  Event,
-  "id" | "createdAt" | "updatedAt" | "parentUrlId"
->;
+// export type GeneratedEvent = Omit<
+//   Event,
+//   "id" | "createdAt" | "updatedAt" | "parentUrlId"
+// >;
+
+export type GeneratedEvent = Omit<Event, "id" | "createdAt" | "updatedAt">;
 
 export const eventSchema = z
   .array(

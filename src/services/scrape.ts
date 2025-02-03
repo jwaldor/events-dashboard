@@ -4,6 +4,8 @@ import { getMarkdownFromUrl } from "@/utils/jina";
 import { zodToJsonSchema } from "zod-to-json-schema";
 import { callDeepseekTextResponse, callOpenRouterModel } from "@/utils/ai";
 import { getUrlImage } from "@/utils/puppeteer";
+import { GeneratedEvent } from "@/schemas/zodDTOs";
+import { Event } from "@prisma/client";
 
 export async function initiallyScrapeUrl(url: string) {
   const markdown = await getMarkdownFromUrl(url);
@@ -37,7 +39,7 @@ export async function initiallyScrapeUrlImage(url: string, model: string) {
 }
 
 export async function updateScrapeUrlImage(
-  newEvents: Event[],
+  newEvents: GeneratedEvent[],
   alreadyScrapedEvents: Event[],
   model: string
 ) {
