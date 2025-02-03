@@ -35,8 +35,22 @@ export default function UrlManager() {
   }
 
   const handleAddUrls = async () => {
-    const urlsToAdd = input.split('\n').filter(url => url.trim() !== '')
+    const urlsToAdd = input.split('\n')
+      .filter(url => url.trim() !== '')
+      .map(url => url.trim())
+
     if (urlsToAdd.length === 0) return
+
+    // Check if all URLs have proper protocol
+    const invalidUrls = urlsToAdd.filter(url => !/^https?:\/\//i.test(url))
+    if (invalidUrls.length > 0) {
+      toast({
+        title: "Invalid URLs",
+        description: "URLs must start with http:// or https://",
+        variant: "destructive",
+      })
+      return
+    }
 
     try {
       const response = await fetch('/api/urls', {
