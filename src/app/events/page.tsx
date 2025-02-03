@@ -4,7 +4,7 @@ import type { Event } from "@/types/event"
 import Link from "next/link"
 
 async function fetchEvents(): Promise<Event[]> {
-    const res = await fetch("/api/events", { next: { revalidate: 60 } })
+    const res = await fetch("/api/events")
     if (!res.ok) {
         throw new Error("Failed to fetch events")
     }
