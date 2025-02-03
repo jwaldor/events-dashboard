@@ -9,6 +9,11 @@ import { zodToJsonSchema } from "zod-to-json-schema";
 
 export type GeneratedEvent = Omit<Event, "id" | "createdAt" | "updatedAt">;
 
+export type GeneratedEventWithoutParentUrlId = Omit<
+  GeneratedEvent,
+  "parentUrlId"
+>;
+
 export const eventSchema = z
   .array(
     z.object({

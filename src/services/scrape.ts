@@ -4,7 +4,10 @@ import { getMarkdownFromUrl } from "@/utils/jina";
 import { zodToJsonSchema } from "zod-to-json-schema";
 import { callDeepseekTextResponse, callOpenRouterModel } from "@/utils/ai";
 import { getUrlImage } from "@/utils/puppeteer";
-import { GeneratedEvent } from "@/schemas/zodDTOs";
+import {
+  GeneratedEvent,
+  GeneratedEventWithoutParentUrlId,
+} from "@/schemas/zodDTOs";
 import { Event } from "@prisma/client";
 
 export async function initiallyScrapeUrl(url: string) {
@@ -22,7 +25,10 @@ ${markdown}`;
   return events;
 }
 
-export async function initiallyScrapeUrlImage(url: string, model: string) {
+export async function initiallyScrapeUrlImage(
+  url: string,
+  model: string
+): Promise<GeneratedEventWithoutParentUrlId[]> {
   const image = await getUrlImage(url);
   console.log("got image");
   const prompt = `Extract all the events from the image according to the following JSON schema. Enclose the JSON within triple backticks (\`\`\`): 
@@ -35,7 +41,20 @@ export async function initiallyScrapeUrlImage(url: string, model: string) {
   console.log("scrape with gemini image");
   console.log(response);
   const events = extractAndValidateJson(response, eventSchema);
-  return events;
+  // Ensure each event's rawText is defined
+  const normalizedEvents = events.map((event) => ({
+    ...event,
+    rawText: event.rawText,
+    extractedTitle: event.extractedTitle,
+    location: event.location,
+    dateTime: event.dateTime ? new Date(event.dateTime) : null,
+    additionalInfo: event.additionalInfo,
+    imageUrl: event.imageUrl,
+    repeating: event.repeating,
+    eventUrl: event.eventUrl,
+  }));
+
+  return normalizedEvents;
 }
 
 export async function updateScrapeUrlImage(
