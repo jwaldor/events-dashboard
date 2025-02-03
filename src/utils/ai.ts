@@ -111,3 +111,30 @@ export const callOpenRouterModel = async (
     throw error;
   }
 };
+
+export const callOpenRouterModelNoImage = async (
+  prompt: string,
+  model: string
+): Promise<string> => {
+  try {
+    const completion = await openRouter.chat.completions.create({
+      model: model,
+      max_tokens: 4096,
+      temperature: 0,
+      messages: [
+        {
+          role: "user",
+          content: prompt,
+        },
+      ],
+    });
+    console.log("qwen response", JSON.stringify(completion));
+    if (completion.choices[0].message) {
+      return completion.choices[0].message.content;
+    }
+    throw new Error("No content in the response");
+  } catch (error) {
+    console.error("Error calling Qwen:", error);
+    throw error;
+  }
+};
