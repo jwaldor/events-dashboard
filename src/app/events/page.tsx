@@ -4,7 +4,7 @@ import type { Event } from "@/types/event"
 import Link from "next/link"
 
 async function fetchEvents(): Promise<Event[]> {
-    const res = await fetch("/api/events")
+    const res = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_URL ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}` : 'http://localhost:3000'}/api/events`)
     if (!res.ok) {
         throw new Error("Failed to fetch events")
     }
