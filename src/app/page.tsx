@@ -1,10 +1,19 @@
 import UrlManager from '@/components/UrlManager'
+import Link from 'next/link'
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-gray-100">
       <main className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-8 text-center">URL Scraper Dashboard</h1>
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-3xl font-bold text-center">URL Scraper Dashboard</h1>
+          <Link
+            href="/events"
+            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors"
+          >
+            View Events
+          </Link>
+        </div>
 
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-8 max-w-3xl mr-auto">
           <h2 className="text-lg font-semibold mb-2">Usage Notes:</h2>
