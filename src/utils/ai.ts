@@ -54,7 +54,10 @@ export async function callDeepseekTextResponse(
       ],
     });
 
-    if (completion.choices[0].message.content) {
+    if (
+      completion.choices[0].message &&
+      completion.choices[0].message.content !== null
+    ) {
       return completion.choices[0].message.content;
     }
     throw new Error("No content in the response");
@@ -102,7 +105,10 @@ export const callOpenRouterModel = async (
       ],
     });
     console.log("qwen response", JSON.stringify(completion));
-    if (completion.choices[0].message) {
+    if (
+      completion.choices[0].message &&
+      completion.choices[0].message.content !== null
+    ) {
       return completion.choices[0].message.content;
     }
     throw new Error("No content in the response");
@@ -129,7 +135,10 @@ export const callOpenRouterModelNoImage = async (
       ],
     });
     console.log("qwen response", JSON.stringify(completion));
-    if (completion.choices[0].message) {
+    if (
+      completion.choices[0].message &&
+      completion.choices[0].message.content !== null
+    ) {
       return completion.choices[0].message.content;
     }
     throw new Error("No content in the response");
