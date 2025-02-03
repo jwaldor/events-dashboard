@@ -61,7 +61,7 @@ export async function updateScrapeUrlImage(
   newEvents: GeneratedEvent[],
   alreadyScrapedEvents: Event[],
   model: string
-) {
+): Promise<Omit<GeneratedEvent, "parentUrlId">[]> {
   const prompt = `
   You are helping to update the database with new events that have been scraped. You will be given a list of events that have are already in the database and a list of newly scraped events.
   We want to incorporate the newly scraped events into the database in a way that does not result in duplicates.
@@ -81,5 +81,16 @@ export async function updateScrapeUrlImage(
   const response = await callOpenRouterModelNoImage(prompt, model);
   console.log(response);
   const events = extractAndValidateJson(response, eventSchema);
-  return events;
+  const normalizedEvents = events.map((event) => ({
+    ...event,
+    dateTime: event.dateTime ? new Date(event.dateTime) : null,
+    rawText: event.rawText,
+    extractedTitle: event.extractedTitle,
+    location: event.location,
+    additionalInfo: event.additionalInfo,
+    imageUrl: event.imageUrl,
+    repeating: event.repeating,
+    eventUrl: event.eventUrl,
+  }));
+  return normalizedEvents;
 }
