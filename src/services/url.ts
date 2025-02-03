@@ -1,5 +1,5 @@
 import { prisma } from "../prismaClient";
-
+import { Url } from "@prisma/client";
 export async function createUrl(fullURL: string) {
   try {
     // Create new URL entry
@@ -48,7 +48,7 @@ export async function deleteUrl(fullURL: string) {
   }
 }
 
-export async function createUrls(fullURLs: string[]) {
+export async function createUrls(fullURLs: string[]): Promise<Url[]> {
   try {
     const urls = await prisma.$transaction(
       fullURLs.map((fullURL) =>
