@@ -10,7 +10,7 @@ export async function GET() {
   const alreadyScrapedEvents = await getAllEvents();
   const urls = await getUrls();
   const newEvents = await Promise.all(
-    urls.map(async (url) => {
+    urls.map(async (url: { id: number; fullURL: string }) => {
       const newEvents = await initiallyScrapeUrlImage(url.fullURL, MODEL);
       const newEventsTransformed = newEvents.map((event) => {
         return {
