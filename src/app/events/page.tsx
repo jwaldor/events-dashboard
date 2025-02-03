@@ -27,6 +27,7 @@ export default async function EventsPage() {
                 <h2 className="text-lg font-semibold mb-2">Usage Notes:</h2>
                 <ul className="list-disc list-inside text-sm text-gray-700">
                     <li>AI can make mistakes. Verify that the location and time information of each event is correct before attending.</li>
+                    <li>Remarkably, the AI can even the names of people associated with an event wrong.</li>
                 </ul>
             </div>
             <div className="flex justify-between items-center mb-8">

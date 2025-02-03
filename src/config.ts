@@ -1,1 +1,1 @@
-export const MODEL = "qwen/qwen-2-vl-72b-instruct";
+export const MODEL = "anthropic/claude-3.5-sonnet";
