@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { createUrls, getUrls, deleteUrl } from "@/services/url";
 import { initiallyScrapeUrlImage } from "@/services/scrape";
 import { createEvents } from "@/services/events";
-
+import { MODEL } from "@/config";
 export async function POST(request: Request) {
   try {
     const { urls } = await request.json();
@@ -20,10 +20,7 @@ export async function POST(request: Request) {
       const events = await Promise.all(
         result.map(async (url) => ({
           parentUrlId: url.id,
-          events: await initiallyScrapeUrlImage(
-            url.fullURL,
-            "qwen/qwen-2-vl-72b-instruct"
-          ),
+          events: await initiallyScrapeUrlImage(url.fullURL, MODEL),
         }))
       );
       const flattenedEvents = events
