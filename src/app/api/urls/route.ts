@@ -18,7 +18,7 @@ export async function POST(request: Request) {
     console.log(result);
     (async () => {
       const events = await Promise.all(
-        result.map(async (url) => ({
+        result.map(async (url: { id: number; fullURL: string }) => ({
           parentUrlId: url.id,
           events: await initiallyScrapeUrlImage(url.fullURL, MODEL),
         }))
