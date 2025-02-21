@@ -3,7 +3,8 @@ import { callOpenRouterModelNoImage, extractAndValidateJson } from "@/utils/ai";
 import { getMarkdownFromUrl } from "@/utils/jina";
 import { zodToJsonSchema } from "zod-to-json-schema";
 import { callDeepseekTextResponse, callOpenRouterModel } from "@/utils/ai";
-import { getUrlImage } from "@/utils/puppeteer";
+// import { getUrlImage } from "@/utils/puppeteer";
+import { capturePageScreenshot } from "@/utils/browserless";
 import {
   GeneratedEvent,
   GeneratedEventWithoutParentUrlId,
@@ -29,7 +30,7 @@ export async function initiallyScrapeUrlImage(
   url: string,
   model: string
 ): Promise<GeneratedEventWithoutParentUrlId[]> {
-  const image = await getUrlImage(url);
+  const image = await capturePageScreenshot(url, 2400);
   console.log("got image");
   const prompt = `Extract all the events from the image according to the following JSON schema. Enclose the JSON within triple backticks (\`\`\`): 
   For reference, the current date is ${new Date().toISOString()}.
